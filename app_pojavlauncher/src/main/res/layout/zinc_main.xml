@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#101214">
+
+    <!-- Sidebar -->
+    <LinearLayout
+        android:id="@+id/zinc_sidebar"
+        android:layout_width="180dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="18dp"
+        android:background="#17191C"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ZINC"
+            android:textColor="#FFFFFF"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:paddingBottom="30dp"/>
+
+        <TextView
+            android:id="@+id/zinc_home_button"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:text="⌂  HOME"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:paddingStart="12dp"/>
+
+        <TextView
+            android:id="@+id/zinc_instances_button"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:text="▣  INSTANCES"
+            android:textColor="#AAAAAA"
+            android:textSize="15sp"
+            android:paddingStart="12dp"/>
+
+        <TextView
+            android:id="@+id/zinc_mods_button"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:text="▦  MODS"
+            android:textColor="#AAAAAA"
+            android:textSize="15sp"
+            android:paddingStart="12dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/zinc_settings_button"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:text="⚙  SETTINGS"
+            android:textColor="#AAAAAA"
+            android:textSize="15sp"
+            android:paddingStart="12dp"/>
+
+    </LinearLayout>
+
+    <!-- Main content -->
+    <LinearLayout
+        android:id="@+id/zinc_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="35dp"
+        app:layout_constraintStart_toEndOf="@id/zinc_sidebar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Minecraft Java"
+            android:textColor="#FFFFFF"
+            android:textSize="28sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/zinc_version_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Fabric 1.21.4"
+            android:textColor="#999999"
+            android:textSize="16sp"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="35dp"/>
+
+        <Button
+            android:id="@+id/zinc_play_button"
+            android:layout_width="280dp"
+            android:layout_height="60dp"
+            android:text="▶  PLAY"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/zinc_account_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="Account: Microsoft"
+            android:textColor="#AAAAAA"
+            android:textSize="15sp"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -30,7 +30,7 @@ import net.kdt.pojavlaunch.authenticator.accounts.Accounts;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.extra.ExtraListener;
-import net.kdt.pojavlaunch.fragments.MainMenuFragment;
+import net.kdt.pojavlaunch.fragments.ZincMainFragment;
 import net.kdt.pojavlaunch.fragments.MicrosoftLoginFragment;
 import net.kdt.pojavlaunch.fragments.SelectAuthFragment;
 import net.kdt.pojavlaunch.instances.Instance;
@@ -65,7 +65,7 @@ public class LauncherActivity extends BaseActivity {
     private final FragmentManager.FragmentLifecycleCallbacks mFragmentCallbackListener = new FragmentManager.FragmentLifecycleCallbacks() {
         @Override
         public void onFragmentResumed(@NonNull FragmentManager fm, @NonNull Fragment f) {
-            mSettingsButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), f instanceof MainMenuFragment
+            mSettingsButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), f instanceof ZincMainFragment
                     ? R.drawable.ic_px_sliders : R.drawable.ic_px_home));
         }
     };
@@ -83,7 +83,7 @@ public class LauncherActivity extends BaseActivity {
         if(!value || manager.isStateSaved()) return false;
         Fragment fragment = manager.findFragmentById(mFragmentView.getId());
         // Allow starting the add account only from the main menu, should it be moved to fragment itself ?
-        if(!(fragment instanceof MainMenuFragment)) return false;
+        if(!(fragment instanceof ZincMainFragment)) return false;
 
         Tools.swapFragment(this, SelectAuthFragment.class, SelectAuthFragment.TAG, null);
         return false;
@@ -94,7 +94,7 @@ public class LauncherActivity extends BaseActivity {
         FragmentManager manager = getSupportFragmentManager();
         if(manager.isStateSaved()) return;
         Fragment fragment = manager.findFragmentById(mFragmentView.getId());
-        if(fragment instanceof MainMenuFragment){
+        if(fragment instanceof ZincMainFragment){
             Tools.swapFragment(this, LauncherPreferenceFragment.class, SETTING_FRAGMENT_TAG, null);
         } else{
             // The setting button doubles as a home button now
