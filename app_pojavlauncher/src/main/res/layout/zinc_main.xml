@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#101214">
+    android:background="#0B0B0B">
 
     <!-- Sidebar -->
     <LinearLayout
@@ -13,7 +13,7 @@
         android:layout_height="0dp"
         android:orientation="vertical"
         android:padding="18dp"
-        android:background="#17191C"
+        android:background="#141414"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -53,6 +53,16 @@
             android:layout_height="50dp"
             android:gravity="center_vertical"
             android:text="▦  MODS"
+            android:textColor="#AAAAAA"
+            android:textSize="15sp"
+            android:paddingStart="12dp"/>
+            
+        <TextView
+            android:id="@+id/zinc_account_button"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:text="♙  ACCOUNT"
             android:textColor="#AAAAAA"
             android:textSize="15sp"
             android:paddingStart="12dp"/>
