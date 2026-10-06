@@ -9,12 +9,10 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.system.Os;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -297,4 +295,5 @@ public class LauncherActivity extends BaseActivity {
     private void bindViews() {
     mFragmentView = findViewById(R.id.container_fragment);
     mProgressLayout = findViewById(R.id.progress_layout);
+     }
 }
