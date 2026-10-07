@@ -50,6 +50,18 @@ public class ZincMainFragment extends Fragment {
                         true
                 )
         );
+        // INSTANCES
+TextView instancesButton =
+        view.findViewById(R.id.zinc_instances_button);
+
+instancesButton.setOnClickListener(v ->
+        Tools.swapFragment(
+                requireActivity(),
+                ZincInstancesFragment.class,
+                ZincInstancesFragment.TAG,
+                null
+        )
+);
 
         // SETTINGS
         TextView settingsButton =
