@@ -152,20 +152,19 @@ public class ZincInstancesFragment extends Fragment {
                         : 0xFF171717
         );
 
-        card.setOnClickListener(v -> {
-            Instances.setSelectedInstance(instance);
+        final String selectedInstanceName = instanceName;
 
-            Toast.makeText(
-                    requireContext(),
-                    "Selected " + instanceName,
-                    Toast.LENGTH_SHORT
-            ).show();
+card.setOnClickListener(v -> {
+    Instances.setSelectedInstance(instance);
 
-            loadInstances();
-        });
+    Toast.makeText(
+            requireContext(),
+            "Selected " + selectedInstanceName,
+            Toast.LENGTH_SHORT
+    ).show();
 
-        instancesContainer.addView(card);
-    }
+    loadInstances();
+});
 
     @Override
     public void onResume() {
