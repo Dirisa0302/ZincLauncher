@@ -9,10 +9,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.instances.DisplayInstance;
+import net.kdt.pojavlaunch.instances.Instance;
+import net.kdt.pojavlaunch.instances.InstanceIconProvider;
 import net.kdt.pojavlaunch.instances.Instances;
 
 import java.io.IOException;
@@ -20,6 +24,8 @@ import java.io.IOException;
 public class ZincInstancesFragment extends Fragment {
 
     public static final String TAG = "ZINC_INSTANCES_FRAGMENT";
+    public static final String ARG_RETURN_TO_ZINC_INSTANCES =
+            "zinc_return_to_instances";
 
     private LinearLayout instancesContainer;
     private TextView instancesCount;
@@ -44,18 +50,24 @@ public class ZincInstancesFragment extends Fragment {
         Button newInstanceButton =
                 view.findViewById(R.id.zinc_new_instance_button);
 
-        newInstanceButton.setOnClickListener(v ->
-                Toast.makeText(
-                        requireContext(),
-                        "New Instance - coming soon",
-                        Toast.LENGTH_SHORT
-                ).show()
-        );
+        newInstanceButton.setOnClickListener(v -> {
+            Bundle args = new Bundle();
+            args.putBoolean(ARG_RETURN_TO_ZINC_INSTANCES, true);
+
+            Tools.swapFragment(
+                    requireActivity(),
+                    ProfileTypeSelectFragment.class,
+                    ProfileTypeSelectFragment.TAG,
+                    args
+            );
+        });
 
         loadInstances();
     }
 
     private void loadInstances() {
+        if (!isAdded() || instancesContainer == null) return;
+
         try {
             Instances instances = Instances.loadDisplay();
 
@@ -70,8 +82,7 @@ public class ZincInstancesFragment extends Fragment {
             for (int i = 0; i < count; i++) {
                 DisplayInstance instance = instances.list.get(i);
 
-                boolean selected =
-                        i == instances.selectedIndex;
+                boolean selected = i == instances.selectedIndex;
 
                 addInstanceCard(instance, selected);
             }
@@ -92,7 +103,6 @@ public class ZincInstancesFragment extends Fragment {
             boolean selected
     ) {
         LinearLayout card = new LinearLayout(requireContext());
-
         card.setOrientation(LinearLayout.VERTICAL);
         card.setPadding(20, 18, 20, 18);
 
@@ -103,10 +113,7 @@ public class ZincInstancesFragment extends Fragment {
                 );
 
         cardParams.setMargins(0, 0, 0, 12);
-
         card.setLayoutParams(cardParams);
-
-        TextView name = new TextView(requireContext());
 
         String instanceName = instance.name;
 
@@ -114,32 +121,26 @@ public class ZincInstancesFragment extends Fragment {
             instanceName = "Unnamed Instance";
         }
 
-        name.setText(instanceName);
-        name.setTextColor(0xFFFFFFFF);
-        name.setTextSize(18);
-
-        TextView version = new TextView(requireContext());
-
         String versionId = instance.versionId;
 
         if (versionId == null || versionId.trim().isEmpty()) {
             versionId = "Unknown version";
         }
 
+        TextView name = new TextView(requireContext());
+        name.setText(instanceName);
+        name.setTextColor(0xFFFFFFFF);
+        name.setTextSize(18);
+        name.setTypeface(null, android.graphics.Typeface.BOLD);
+
+        TextView version = new TextView(requireContext());
         version.setText(versionId);
         version.setTextColor(0xFF999999);
         version.setTextSize(14);
 
         TextView status = new TextView(requireContext());
-
-        if (selected) {
-            status.setText("✓ SELECTED");
-            status.setTextColor(0xFFFFFFFF);
-        } else {
-            status.setText("TAP TO SELECT");
-            status.setTextColor(0xFF777777);
-        }
-
+        status.setText(selected ? "✓ SELECTED" : "TAP TO SELECT");
+        status.setTextColor(selected ? 0xFFFFFFFF : 0xFF777777);
         status.setTextSize(13);
 
         card.addView(name);
@@ -147,26 +148,167 @@ public class ZincInstancesFragment extends Fragment {
         card.addView(status);
 
         card.setBackgroundColor(
-                selected
-                        ? 0xFF242424
-                        : 0xFF171717
+                selected ? 0xFF242424 : 0xFF171717
         );
 
-        final String selectedInstanceName = instanceName;
+        final String displayName = instanceName;
 
+        // SELECT
         card.setOnClickListener(v -> {
-            Instances.setSelectedInstance(instance);
+            try {
+                Instances.setSelectedInstance(instance);
 
-            Toast.makeText(
-                    requireContext(),
-                    "Selected " + selectedInstanceName,
-                    Toast.LENGTH_SHORT
-            ).show();
+                Toast.makeText(
+                        requireContext(),
+                        "Selected " + displayName,
+                        Toast.LENGTH_SHORT
+                ).show();
 
-            loadInstances();
+                loadInstances();
+
+            } catch (Exception e) {
+                Toast.makeText(
+                        requireContext(),
+                        "Could not select instance",
+                        Toast.LENGTH_LONG
+                ).show();
+            }
         });
 
+        // ACTION BUTTONS
+        LinearLayout actions = new LinearLayout(requireContext());
+        actions.setOrientation(LinearLayout.HORIZONTAL);
+
+        LinearLayout.LayoutParams actionsParams =
+                new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+
+        actionsParams.topMargin = 10;
+        actions.setLayoutParams(actionsParams);
+
+        Button editButton = new Button(requireContext());
+        editButton.setText("EDIT");
+
+        Button deleteButton = new Button(requireContext());
+        deleteButton.setText("DELETE");
+
+        LinearLayout.LayoutParams editParams =
+                new LinearLayout.LayoutParams(
+                        0, 48, 1f
+                );
+
+        LinearLayout.LayoutParams deleteParams =
+                new LinearLayout.LayoutParams(
+                        0, 48, 1f
+                );
+
+        deleteParams.leftMargin = 8;
+
+        actions.addView(editButton, editParams);
+        actions.addView(deleteButton, deleteParams);
+        card.addView(actions);
+
+        // EDIT
+        editButton.setOnClickListener(v -> {
+            try {
+                Instances.setSelectedInstance(instance);
+
+                Bundle args = new Bundle();
+                args.putBoolean(ARG_RETURN_TO_ZINC_INSTANCES, true);
+
+                Tools.swapFragment(
+                        requireActivity(),
+                        InstanceEditorFragment.class,
+                        InstanceEditorFragment.TAG,
+                        args
+                );
+
+            } catch (Exception e) {
+                Toast.makeText(
+                        requireContext(),
+                        "Could not open instance editor",
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+        });
+
+        // DELETE
+        deleteButton.setOnClickListener(v ->
+                confirmDelete(instance, displayName)
+        );
+
         instancesContainer.addView(card);
+    }
+
+    private void confirmDelete(
+            DisplayInstance displayInstance,
+            String instanceName
+    ) {
+        try {
+            Instances instances = Instances.loadDisplay();
+
+            if (instances.list.size() <= 1) {
+                Toast.makeText(
+                        requireContext(),
+                        "Keep at least one instance",
+                        Toast.LENGTH_LONG
+                ).show();
+                return;
+            }
+        } catch (IOException e) {
+            Toast.makeText(
+                    requireContext(),
+                    "Could not check instances",
+                    Toast.LENGTH_LONG
+            ).show();
+            return;
+        }
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Delete instance?")
+                .setMessage(
+                        "Delete \"" + instanceName
+                                + "\"? This cannot be undone."
+                )
+                .setNegativeButton("CANCEL", null)
+                .setPositiveButton("DELETE", (dialog, which) -> {
+                    try {
+                        // Load the exact instance selected from this card.
+                        Instances.setSelectedInstance(displayInstance);
+
+                        Instance target = Instances.loadSelectedInstance();
+
+                        if (target == null) {
+                            Toast.makeText(
+                                    requireContext(),
+                                    "Could not find instance",
+                                    Toast.LENGTH_LONG
+                            ).show();
+                            return;
+                        }
+
+                        InstanceIconProvider.dropIcon(target);
+                        Instances.removeInstance(target);
+
+                        Toast.makeText(
+                                requireContext(),
+                                "Instance deleted",
+                                Toast.LENGTH_SHORT
+                        ).show();
+
+                        loadInstances();
+
+                    } catch (Exception e) {
+                        Toast.makeText(
+                                requireContext(),
+                                "Could not delete instance",
+                                Toast.LENGTH_LONG
+                        ).show();
+                    }
+                })
+                .show();
     }
 
     @Override

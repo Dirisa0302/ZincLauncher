@@ -85,10 +85,25 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
 
         // Set up behaviors
         mSaveButton.setOnClickListener(v -> {
-            InstanceIconProvider.dropIcon(mInstance);
-            save();
-            Tools.backToMainMenu(requireActivity());
-        });
+    InstanceIconProvider.dropIcon(mInstance);
+    save();
+
+    Bundle args = getArguments();
+
+    if (args != null && args.getBoolean(
+            ZincInstancesFragment.ARG_RETURN_TO_ZINC_INSTANCES,
+            false
+    )) {
+        requireActivity()
+                .getSupportFragmentManager()
+                .popBackStack(
+                        ZincInstancesFragment.class.getName(),
+                        0
+                );
+    } else {
+        Tools.backToMainMenu(requireActivity());
+    }
+});
 
         mDeleteButton.setOnClickListener(v -> {
             DeleteConfirmDialogFragment dialogFragment = new DeleteConfirmDialogFragment();

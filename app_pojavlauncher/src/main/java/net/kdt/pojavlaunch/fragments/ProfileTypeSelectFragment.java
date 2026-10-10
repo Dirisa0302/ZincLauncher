@@ -24,16 +24,31 @@ public class ProfileTypeSelectFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         view.findViewById(R.id.vanilla_profile).setOnClickListener(v -> {
-            try {
-                Instance instance = Instances.createDefaultInstance();
-                Instances.setSelectedInstance(instance);
-                Tools.swapFragment(requireActivity(), InstanceEditorFragment.class,
-                        InstanceEditorFragment.TAG, new Bundle(1));
-            }catch (IOException e) {
-                Tools.showError(view.getContext(), e);
-            }
-        });
+    try {
+        Instance instance = Instances.createDefaultInstance();
+        Instances.setSelectedInstance(instance);
 
+        Bundle args = new Bundle();
+        args.putBoolean(
+                ZincInstancesFragment.ARG_RETURN_TO_ZINC_INSTANCES,
+                getArguments() != null
+                        && getArguments().getBoolean(
+                                ZincInstancesFragment.ARG_RETURN_TO_ZINC_INSTANCES,
+                                false
+                        )
+        );
+
+        Tools.swapFragment(
+                requireActivity(),
+                InstanceEditorFragment.class,
+                InstanceEditorFragment.TAG,
+                args
+        );
+
+    } catch (IOException e) {
+        Tools.showError(view.getContext(), e);
+    }
+});
         // NOTE: Special care needed! If you wll decide to add these to the back stack, please read
         // the comment in FabricInstallFragment.onDownloadFinished() and amend the code
         // in FabricInstallFragment.onDownloadFinished() and ModVersionListFragment.onDownloadFinished()
