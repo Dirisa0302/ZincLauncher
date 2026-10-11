@@ -19,6 +19,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
+import net.kdt.pojavlaunch.fragments.ZincInstancesFragment;
+import net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceFragment;
 
 import com.kdt.mcgui.ProgressLayout;
 
@@ -66,11 +68,7 @@ public class LauncherActivity extends BaseActivity {
     private final ExtraListener<Boolean> mSelectAuthMethod = (key, value) -> {
         // The "false" value is used to stop auth method selection
         FragmentManager manager = getSupportFragmentManager();
-        if(!value || manager.isStateSaved()) return false;
-        Fragment fragment = manager.findFragmentById(mFragmentView.getId());
-        // Allow starting the add account only from the main menu, should it be moved to fragment itself ?
-        if(!(fragment instanceof ZincMainFragment)) return false;
-
+        if(!value || manager.isStateSaved()) return false;        
         Tools.swapFragment(this, SelectAuthFragment.class, SelectAuthFragment.TAG, null);
         return false;
     };
@@ -295,5 +293,64 @@ public class LauncherActivity extends BaseActivity {
     private void bindViews() {
     mFragmentView = findViewById(R.id.container_fragment);
     mProgressLayout = findViewById(R.id.progress_layout);
-     }
+
+    // HOME: quay về fragment gốc
+    findViewById(R.id.zinc_home_button).setOnClickListener(v ->
+            getSupportFragmentManager().popBackStack(
+                    null,
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE
+            )
+    );
+
+    // INSTANCES
+    findViewById(R.id.zinc_instances_button).setOnClickListener(v ->
+            Tools.swapFragment(
+                    this,
+                    ZincInstancesFragment.class,
+                    ZincInstancesFragment.TAG,
+                    null
+            )
+    );
+
+    // ACCOUNT
+    findViewById(R.id.zinc_account_button).setOnClickListener(v ->
+            Tools.swapFragment(
+                    this,
+                    SelectAuthFragment.class,
+                    SelectAuthFragment.TAG,
+                    null
+            )
+    );
+
+    // SETTINGS
+    findViewById(R.id.zinc_settings_button).setOnClickListener(v -> {
+        FragmentManager manager = getSupportFragmentManager();
+
+        if (manager.isStateSaved()) return;
+
+        Tools.swapFragment(
+                this,
+                LauncherPreferenceFragment.class,
+                SETTING_FRAGMENT_TAG,
+                null
+        );
+    });
+
+    // MODS: tạm thời chưa có trang
+    findViewById(R.id.zinc_mods_button).setOnClickListener(v ->
+            Toast.makeText(
+                    this,
+                    "Mods - coming soon",
+                    Toast.LENGTH_SHORT
+            ).show()
+    );
+
+    // SUPPORT: tạm thời chưa có liên kết
+    findViewById(R.id.zinc_coffee_button).setOnClickListener(v ->
+            Toast.makeText(
+                    this,
+                    "Support Zinc - coming soon",
+                    Toast.LENGTH_SHORT
+            ).show()
+    );
 }
