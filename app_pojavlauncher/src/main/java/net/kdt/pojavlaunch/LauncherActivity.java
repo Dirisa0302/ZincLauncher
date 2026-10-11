@@ -354,3 +354,4 @@ public class LauncherActivity extends BaseActivity {
             ).show()
     );
 }
+}
