@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.system.Os;
 import android.widget.Toast;
+import android.view.View;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -289,21 +290,49 @@ public class LauncherActivity extends BaseActivity {
                 .apply();
     }
 
-    /** Stuff all the view boilerplate here */
-    private void bindViews() {
+private void setSidebarClickListener(
+        int viewId,
+        View.OnClickListener listener
+) {
+    View view = findViewById(viewId);
+
+    if (view == null) {
+        android.util.Log.e(
+                "ZincLauncher",
+                "Missing sidebar view: "
+                        + getResources().getResourceEntryName(viewId)
+        );
+        return;
+    }
+
+    view.setOnClickListener(listener);
+}
+
+  
+private void bindViews() {
     mFragmentView = findViewById(R.id.container_fragment);
     mProgressLayout = findViewById(R.id.progress_layout);
 
-    // HOME: quay về fragment gốc
-    findViewById(R.id.zinc_home_button).setOnClickListener(v ->
+    if (mFragmentView == null) {
+        throw new IllegalStateException(
+                "container_fragment missing from activity_pojav_launcher.xml"
+        );
+    }
+
+    if (mProgressLayout == null) {
+        throw new IllegalStateException(
+                "progress_layout missing from activity_pojav_launcher.xml"
+        );
+    }
+
+    setSidebarClickListener(R.id.zinc_home_button, v ->
             getSupportFragmentManager().popBackStack(
                     null,
                     FragmentManager.POP_BACK_STACK_INCLUSIVE
             )
     );
 
-    // INSTANCES
-    findViewById(R.id.zinc_instances_button).setOnClickListener(v ->
+    setSidebarClickListener(R.id.zinc_instances_button, v ->
             Tools.swapFragment(
                     this,
                     ZincInstancesFragment.class,
@@ -312,8 +341,7 @@ public class LauncherActivity extends BaseActivity {
             )
     );
 
-    // ACCOUNT
-    findViewById(R.id.zinc_account_button).setOnClickListener(v ->
+    setSidebarClickListener(R.id.zinc_account_button, v ->
             Tools.swapFragment(
                     this,
                     SelectAuthFragment.class,
@@ -322,8 +350,7 @@ public class LauncherActivity extends BaseActivity {
             )
     );
 
-    // SETTINGS
-    findViewById(R.id.zinc_settings_button).setOnClickListener(v -> {
+    setSidebarClickListener(R.id.zinc_settings_button, v -> {
         FragmentManager manager = getSupportFragmentManager();
 
         if (manager.isStateSaved()) return;
@@ -336,8 +363,7 @@ public class LauncherActivity extends BaseActivity {
         );
     });
 
-    // MODS: tạm thời chưa có trang
-    findViewById(R.id.zinc_mods_button).setOnClickListener(v ->
+    setSidebarClickListener(R.id.zinc_mods_button, v ->
             Toast.makeText(
                     this,
                     "Mods - coming soon",
@@ -345,13 +371,11 @@ public class LauncherActivity extends BaseActivity {
             ).show()
     );
 
-    // SUPPORT: tạm thời chưa có liên kết
-    findViewById(R.id.zinc_coffee_button).setOnClickListener(v ->
+    setSidebarClickListener(R.id.zinc_coffee_button, v ->
             Toast.makeText(
                     this,
                     "Support Zinc - coming soon",
                     Toast.LENGTH_SHORT
             ).show()
     );
-}
 }
