@@ -1,21 +1,17 @@
+
 package net.kdt.pojavlaunch.fragments;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import git.artdeell.mojo.R;
-import net.kdt.pojavlaunch.LauncherActivity;
-import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
-import net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceFragment;
 
 public class ZincMainFragment extends Fragment {
 
@@ -30,55 +26,16 @@ public class ZincMainFragment extends Fragment {
     ) {
         super.onViewCreated(view, savedInstanceState);
 
-        // PLAY
+        // PLAY: giữ nguyên luồng khởi chạy Minecraft
         Button playButton = view.findViewById(R.id.zinc_play_button);
 
-        playButton.setOnClickListener(v ->
-                ExtraCore.setValue(
-                        ExtraConstants.LAUNCH_GAME,
-                        true
-                )
-        );
-
-        // ACCOUNT
-        TextView accountButton =
-                view.findViewById(R.id.zinc_account_button);
-
-        accountButton.setOnClickListener(v ->
-                ExtraCore.setValue(
-                        ExtraConstants.SELECT_AUTH_METHOD,
-                        true
-                )
-        );
-        // INSTANCES
-TextView instancesButton =
-        view.findViewById(R.id.zinc_instances_button);
-
-instancesButton.setOnClickListener(v ->
-        Tools.swapFragment(
-                requireActivity(),
-                ZincInstancesFragment.class,
-                ZincInstancesFragment.TAG,
-                null
-        )
-);
-
-        // SETTINGS
-        TextView settingsButton =
-                view.findViewById(R.id.zinc_settings_button);
-
-        settingsButton.setOnClickListener(v -> {
-            FragmentManager manager =
-                    requireActivity().getSupportFragmentManager();
-
-            if (manager.isStateSaved()) return;
-
-            Tools.swapFragment(
-                    requireActivity(),
-                    LauncherPreferenceFragment.class,
-                    LauncherActivity.SETTING_FRAGMENT_TAG,
-                    null
+        if (playButton != null) {
+            playButton.setOnClickListener(v ->
+                    ExtraCore.setValue(
+                            ExtraConstants.LAUNCH_GAME,
+                            true
+                    )
             );
-        });
+        }
     }
 }
